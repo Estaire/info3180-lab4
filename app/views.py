@@ -58,8 +58,11 @@ def login():
 
 @app.route('/files')
 def files():
-    items = get_uploaded_images()
-    return render_template('files.html', items=items)
+    if not session.get('logged_in'):
+        flash('You are not logged in')
+    else:
+        items = get_uploaded_images()
+        return render_template('files.html', items=items)
     return render_template('files.html', items=[])
 
 @app.route('/logout')

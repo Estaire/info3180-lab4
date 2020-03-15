@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block main %}
+
+{% include 'flash_messages.html' %}
+
+<ul>
+	{% for item in items %}
+        <li style="list-style: none;"><img src="{{ item }}" alt="Error loading image" style="max-width: 50%; max-height: 400px;"></li>
+        <br>
+    {% endfor %}
+</ul>
+{% endblock %}

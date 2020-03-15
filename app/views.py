@@ -56,6 +56,11 @@ def login():
             return redirect(url_for('upload'))
     return render_template('login.html', error=error)
 
+@app.route('/files')
+def files():
+    items = get_uploaded_images()
+    return render_template('files.html', items=items)
+    return render_template('files.html', items=[])
 
 @app.route('/logout')
 def logout():
@@ -76,6 +81,16 @@ def flash_errors(form):
                 getattr(form, field).label.text,
                 error
 ), 'danger')
+
+
+def get_uploaded_images():
+    rootdir = os.getcwd()
+    items = []
+    for subdir, dirs, files in os.walk(rootdir + '/app/static/uploads'):
+        for file in files:
+            items.append(os.path.join("../static/uploads", file))
+    return items
+
 
 @app.route('/<file_name>.txt')
 def send_text_file(file_name):

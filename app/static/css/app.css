@@ -1,3 +1,8 @@
 body {
     padding-top: 5rem;
 }
+
+ul{
+    display: flex;
+    justify-content: space-around;
+}

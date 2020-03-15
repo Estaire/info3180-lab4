@@ -9,7 +9,8 @@ from app import app
 from .forms import UploadForm
 from flask import render_template, request, redirect, url_for, flash, session, abort
 from werkzeug.utils import secure_filename
-
+from flask_wtf.csrf import CsrfProtect
+CsrfProtect(app)
 
 ###
 # Routing for your application.
@@ -29,21 +30,16 @@ def about():
 
 @app.route('/upload', methods=['POST', 'GET'])
 def upload():
-    if not session.get('logged_in'):
-        abort(401)
-
-    # Instantiate your form class
     form = UploadForm()
-    file = request.files['file']
-    # Validate file upload on submit
     if request.method == 'POST':
-        # Get file data and save to your uploads folder
         if form.validate_on_submit():
+            file = request.files['upload']
+            filename = secure_filename(file.filename) 
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
             flash('File Saved', 'success')
-            form = secure_filename(file.form)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], form))
             return redirect(url_for('home'))
-
+        else:
+            flash('Failed validation')
     return render_template('upload.html', form=form)
 
 
